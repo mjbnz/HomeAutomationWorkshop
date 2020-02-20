@@ -38,8 +38,8 @@ To make life easier, lets first enable a few plugins to allow us to configure Ho
 ![Activate Menu](images/hamburger.png)
 - Click on Hass.io, then Addon Store
 - Select the Configurator addon (under Official Addons), then click "Install". This addon allows you to edit the system configuration through a web interface.
-- Once installed, add a password to the config, don't forget to wrap in it quotes. If you run a different IP range at home to the ones preconfigured, take the opportunity to add that too. Press save in the bottom right to save your changes.
-![Configurator config](images/configurator.png)
+- (No longer needed)~Once installed, add a password to the config, don't forget to wrap in it quotes. If you run a different IP range at home to the ones preconfigured, take the opportunity to add that too. Press save in the bottom right to save your changes.
+[Configurator config](images/configurator.png)~
 - Finally hit "Start" to start the addon. You can view any log messages from the addon by clicking "refresh" in the log panel.
 
 ## Initial Home Assistant Configuration
