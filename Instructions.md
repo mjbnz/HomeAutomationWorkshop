@@ -59,7 +59,9 @@ You may not be able to copy/paste this, so you'll have to type it in.
 ![Home Assistant Check Config](images/check_config.png)
 
 ## Patch GPIO code for the Orange Pi
-This step will not be necessary once [Mikal Still's GPIO patches](https://github.com/home-assistant/home-assistant/pull/19732) have been merged.
+~This step will not be necessary once [Mikal Still's GPIO patches](https://github.com/home-assistant/home-assistant/pull/19732) have been merged.~
+
+Home Assistant now [has OrangePi support](https://github.com/home-assistant/home-assistant/pull/22541), but only has a `binary_sensor` integration, not `switch`, so we need to create it.
 
 - In the Addon Store, under Community Hass.IO Addons, install "SSH and Web Terminal"
 - The SSH daemon authenticates via your public key. If you don't have one generated already, build one new with `ssh-keygen`
@@ -73,12 +75,11 @@ This step will not be necessary once [Mikal Still's GPIO patches](https://github
 - SSH into the machine `ssh hassio@#orange pi IP#`
 - Get a shell in the docker instance of Home Assistant `docker exec -it homeassistant bash`
 ```
-cd /tmp
-wget https://raw.githubusercontent.com/InfernoEmbedded/HomeAutomationWorkshop/master/patches/homeassistant-gpio-opi.patch
-cd /usr/local/lib/python3.6/site-packages/
-patch -p 1 </tmp/homeassistant-gpio-opi.patch
-rm /tmp/homeassistant-gpio-opi.patch
-pip install OPi.GPIO
+cd /usr/src/homeassistant/homeassistant/components/orangepi_gpio/
+wget https://raw.githubusercontent.com/mjbnz/HomeAutomationWorkshop/master/patches/switch.py
+wget https://raw.githubusercontent.com/mjbnz/HomeAutomationWorkshop/master/patches/add_to__init__.py
+cat add_to__init__.py >> __init__.py
+rm add_to__init__.py
 exit
 ```
 - You should now be back in the SSH session's shell. The following command will make the patch you just made permanent (at least until you upgrade Home Assistant
@@ -95,19 +96,19 @@ connected to PC5).
 ## Enable GPIO
 - Using the Configurator addon we used previously, edit `configuration.yaml` and add the following section:
 ```
-rpi_gpio:
-  board_family: orange_pi
-
 switch:
- - platform: rpi_gpio
-   ports:
-     PC8: Relay1
-
-binary_sensor:
- - platform: rpi_gpio
+ - platform: orangepi_gpio
+   pin_mode: prime
    invert_logic: true
    ports:
-     PA6: Pushbutton
+     26: Relay1
+
+binary_sensor:
+ - platform: orangepi_gpio
+   pin_mode: prime
+   invert_logic: true
+   ports:
+     7: Pushbutton
 ```
 - Save your changes, check the configuration then restart Home Assistant
 - You should now see Relay1 in the list of devices in the overview, and Pushbutton as a sensor at the top of the overview.
